@@ -12,10 +12,13 @@ import os, json, ast, spotipy
 import pandas as pd
 
 class Recommend_songs:
-    def __init__(self, pop=80):
+    def __init__(self, data):
         self.recommended_songs = {}
-        self.pop = pop
+        self.data = data
+        self.pop = self.data["pop"]
+        self.query = self.data["query"]
         load_dotenv()
+        
         # Spotipy 아이디, 비밀 키 로딩
         client_id = os.getenv("SPOTIPY_CLIENT_ID")
         client_secret = os.getenv("SPOTIPY_CLIENT_SECRET")
@@ -26,7 +29,7 @@ class Recommend_songs:
         # 모델 초기화
         self.model = init_chat_model("gpt-4o-mini", model_provider="openai")
 
-    def recommend(self, my_location, my_weather, target, config, query, language):
+    def recommend(self, my_location, my_weather, target, config, language):
         self.prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
@@ -71,7 +74,7 @@ class Recommend_songs:
             app = workflow.compile()
 
             # 입력 메시지 설정
-            input_messages = [HumanMessage(query)]
+            input_messages = [HumanMessage(self.query)]
             output = app.invoke(
                 {"messages": input_messages, "language": language}
             )
