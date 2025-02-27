@@ -14,7 +14,7 @@ app = FastAPI()
 class RequestData(BaseModel):
     latitude: float
     longitude: float
-    message: str
+    query: str
     pop: int
     
 
@@ -47,9 +47,9 @@ async def response_process(data: RequestData):
     loca = GetLocation(data).convert_coordinates_to_address()
     now_whea = Wheather(f"{loca.split(sep = " ")[1]}", f"{loca.split(sep = " ")[2]}")
 
-    playlist = Recommend_songs(max(pop, 20))
+    playlist = Recommend_songs(data)
     my_musics = playlist.recommend(f"{loca}", f"{now_whea.get_sky()}", 5, 
-    {"configurable": {"thread_id": "abc678"}}, "오늘은 기쁜 날이야.", "Korean")
+    {"configurable": {"thread_id": "abc678"}}, "Korean")
 
     df = pd.DataFrame(my_musics.items(), columns=['artist', 'title'])
     songs_list = df.to_dict(orient = 'records')
