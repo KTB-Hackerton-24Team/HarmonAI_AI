@@ -15,6 +15,8 @@ class RequestData(BaseModel):
     latitude: float
     longitude: float
     message: str
+    pop: int
+    
 
     class Config:
         orm_mode = True
@@ -45,8 +47,8 @@ async def response_process(data: RequestData):
     loca = GetLocation(data).convert_coordinates_to_address()
     now_whea = Wheather(f"{loca.split(sep = " ")[1]}", f"{loca.split(sep = " ")[2]}")
 
-    playlist = Recommend_songs()
-    my_musics = playlist.recommend(f"{loca}", f"{now_whea.get_sky()}", 5, 60, 
+    playlist = Recommend_songs(max(pop, 20))
+    my_musics = playlist.recommend(f"{loca}", f"{now_whea.get_sky()}", 5, 
     {"configurable": {"thread_id": "abc678"}}, "오늘은 기쁜 날이야.", "Korean")
 
     df = pd.DataFrame(my_musics.items(), columns=['artist', 'title'])
