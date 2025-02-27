@@ -15,8 +15,6 @@ class Recommend_songs:
     def __init__(self, data):
         self.recommended_songs = {}
         self.data = data
-        self.pop = self.data["pop"]
-        self.query = self.data["query"]
         load_dotenv()
         
         # Spotipy 아이디, 비밀 키 로딩
@@ -30,6 +28,9 @@ class Recommend_songs:
         self.model = init_chat_model("gpt-4o-mini", model_provider="openai")
 
     def recommend(self, my_location, my_weather, target, config, language):
+        data_dict = self.data.dict()  # Pydantic 모델을 dict로 변환
+        pop = int(data_dict["pop"])
+        query = data_dict["query"]
         self.prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
@@ -74,7 +75,7 @@ class Recommend_songs:
             app = workflow.compile()
 
             # 입력 메시지 설정
-            input_messages = [HumanMessage(self.query)]
+            input_messages = [HumanMessage(query)]
             output = app.invoke(
                 {"messages": input_messages, "language": language}
             )
@@ -98,7 +99,7 @@ class Recommend_songs:
 
                 try:
                     track_popularity = results["tracks"]["items"][0]["popularity"]
-                    if track_popularity <= self.pop:
+                    if track_popularity <= pop:
                         self.recommended_songs[artist] = track
 
                     if len(self.recommended_songs) == target:
