@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import os
 
-class wheather:
+class Wheather:
     def __init__(self, si, gu):
         data = pd.read_excel('./location_grids.xlsx')
 
@@ -50,17 +50,19 @@ class wheather:
         res = json.loads(response.text)
 
         informations = dict()
-        for items in res['response']['body']['items']['item'] :
-            cate = items['category']
-            fcstTime = items['fcstTime']
-            fcstValue = items['fcstValue']
-            temp = dict()
-            temp[cate] = fcstValue
-
-            if fcstTime not in informations.keys() :
+        
+        items = res.get('response', {}).get('body', {}).get('items', {}).get('item')
+        if not items:
+            raise ValueError("예보 데이터를 가져오지 못했습니다. API 응답: " + json.dumps(res, ensure_ascii=False))
+        
+        for item in items:
+            cate = item['category']
+            fcstTime = item['fcstTime']
+            fcstValue = item['fcstValue']
+            if fcstTime not in informations:
                 informations[fcstTime] = dict()
             informations[fcstTime][cate] = fcstValue
-
+            
         key = list(informations.keys())[-1]
         val = informations[key]
 
