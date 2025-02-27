@@ -12,8 +12,9 @@ import os, json, ast, spotipy
 import pandas as pd
 
 class Recommend_songs:
-    def __init__(self):
+    def __init__(self, pop=80):
         self.recommended_songs = {}
+        self.pop = pop
         load_dotenv()
         # Spotipy 아이디, 비밀 키 로딩
         client_id = os.getenv("SPOTIPY_CLIENT_ID")
@@ -25,7 +26,7 @@ class Recommend_songs:
         # 모델 초기화
         self.model = init_chat_model("gpt-4o-mini", model_provider="openai")
 
-    def recommend(self, my_location, my_weather, target, pop_parameter, config, query, language):
+    def recommend(self, my_location, my_weather, target, config, query, language):
         self.prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
@@ -94,7 +95,7 @@ class Recommend_songs:
 
                 try:
                     track_popularity = results["tracks"]["items"][0]["popularity"]
-                    if track_popularity <= pop_parameter:
+                    if track_popularity <= self.pop:
                         self.recommended_songs[artist] = track
 
                     if len(self.recommended_songs) == target:
