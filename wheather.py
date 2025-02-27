@@ -18,13 +18,9 @@ class Wheather:
         grid = data[(data['1단계'] == self.si) & (data['2단계'] == self.gu)]
         if not grid.empty:
             self.nx = f"{grid.iloc[0]['격자 X']}"
-            print(self.nx)
             self.ny = f"{grid.iloc[0]['격자 Y']}"
-            print(self.ny)
 
         else:
-            print(f"{self.si} {self.gu}가 존재하지 않습니다.")
-            print("서울특별시 종로구 날씨를 출력합니다.")
             self.nx = '60'
             self.ny = '127'
 

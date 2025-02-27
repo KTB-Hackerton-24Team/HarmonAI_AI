@@ -31,16 +31,6 @@ class ResponseData(BaseModel):
 # Song artist Class 생성하기
 # 테스트 데이터
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.post("/test", response_model = RequestData)
-async def response_process(data: RequestData):
-    print(data)
-
-    return data
-
 @app.post("/api/info/current", response_model = List[ResponseData])
 async def response_process(data: RequestData):
     

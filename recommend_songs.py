@@ -88,7 +88,6 @@ class Recommend_songs:
             try:
                 music_dict = json.loads(music_dict)
             except:
-                print('오류가 발생했습니다. 애플리케이션을 재실행합니다.')
                 continue
 
             # 미리 설정한 Popularity Parameter에 따라 트랙 조절

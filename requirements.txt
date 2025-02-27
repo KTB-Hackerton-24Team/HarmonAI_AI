@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pandas
+googlemaps
+python-dotenv
+langchain
+langgraph
+spotipy
