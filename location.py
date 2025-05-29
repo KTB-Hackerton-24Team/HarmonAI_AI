@@ -8,7 +8,7 @@ class GetLocation:
   def __init__(self, data):
     load_dotenv()
     self.data = data
-    self.google_map_key = "AIzaSyBImt7oXDGSTfBfh2hlJZqPDB7Q-ZilYBk"
+    self.google_map_key = os.getenv("GOOLEMAPS_API")
 
   def convert_coordinates_to_address(self):
     """
