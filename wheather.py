@@ -8,7 +8,7 @@ class Wheather:
     def __init__(self, si, gu):
         data = pd.read_excel('./location_grids.xlsx')
 
-        self.serviceKey = "GqEWtRiEG86%2BLC9zwqeHkFi42baLKX19W1WXnsGTykoDeqoYnmxQiBa6nuAPKDDN%2F2cIdOcr%2B9yfl4fS2q8LGg%3D%3D"
+        self.serviceKey = os.getenv("WEATHER_API")
         now = datetime.now()
 
         self.base_date = now.strftime("%Y%m%d")
